@@ -125,12 +125,7 @@ documents.onDidChangeContent(change => {
 	validateTextDocument(change.document);
 });
 
-// 保存時にも動かしたいなら
-//documents.onDidSave(file => {
-//	validateTextDocument(file.document);
-//});
-
-documents.onDidOpen(file => {
+documents.onDidSave(file => {
 	validateTextDocument(file.document);
 });
 
