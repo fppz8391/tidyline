@@ -125,26 +125,22 @@ documents.onDidChangeContent(change => {
 	validateTextDocument(change.document);
 });
 
-documents.onDidSave(file => {
-	validateTextDocument(file.document);
-});
-
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	// In this simple example we get the settings for every validate run.
 	let settings = await getDocumentSettings(textDocument.uri);
-	let editor = decodeURIComponent(textDocument.uri);
-	let file = editor.substr(8);
+	let editor =decodeURIComponent(textDocument.uri);
+	let file=editor.substr(8);
 	let filename = file.split('/');
 	//let tracker=new ErrorMessageTracker();
-	var text: string;
+	var text:string;
 	child_process.exec('clang -Weverything ' + file, (error, stdout) => {
-		if (error instanceof Error) {
-			text = error.message;
+		if ( error instanceof Error) {
+			text =error.message;
 		} else {
 			console.log(stdout);
 			console.log('exec Success!');
 			text = stdout;
-		}
+		} 
 		// The validator creates diagnostics for all uppercase words length 2 and more
 		let pattern = /.c:([0-9]{1,}):([0-9]{1,}):\s{1,}(error|warning):([^\n]{1,})\n([^\n]{1,})\n/gm;
 		//tracker.add(text);
@@ -155,13 +151,13 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 		while ((m = pattern.exec(text)) && problems < settings.maxNumberOfProblems) {
 			problems++;
 			let diagnostic: Diagnostic = {
-				severity: (m[3] == 'error' ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning),
+				severity: (m[3]=='error'?DiagnosticSeverity.Error:DiagnosticSeverity.Warning),
 				range: {
-					start: Position.create(parseInt(m[1]) - 1, parseInt(m[2]) - 1),
-					end: Position.create(parseInt(m[1]) - 1, parseInt(m[2] + m[5].length) - 1)
+					start: Position.create(parseInt(m[1])-1,parseInt(m[2])-1),
+					end: Position.create(parseInt(m[1])-1,parseInt(m[2]+m[5].length)-1)
 				},
 				message: m[4],
-				source: filename[filename.length - 1]
+				source: filename[filename.length-1]
 			};
 			diagnostics.push(diagnostic);
 		}

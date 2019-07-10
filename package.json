@@ -1,24 +1,25 @@
 {
-	"name": "tidyline",
-	"displayName": "tidyline",
-	"description": "2019seminarA",
+	"name": "lsp-sample",
+	"description": "A language server example",
+	"author": "Microsoft Corporation",
 	"license": "MIT",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/yuu-irym/tidyline"
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
 	},
+	"publisher": "vscode-samples",
+	"categories": [],
+	"keywords": [
+		"multi-root ready"
+	],
 	"engines": {
-		"vscode": "^1.35.0"
+		"vscode": "^1.23.0"
 	},
-	"categories": [
-		"Linters"
-	],
 	"activationEvents": [
-		"onLanguage:cpp",
-		"onLanguage:c"
+		"onLanguage:plaintext"
 	],
-	"main": "./out/extension.js",
+	"main": "./client/out/extension",
 	"contributes": {
 		"configuration": {
 			"type": "object",
@@ -45,22 +46,16 @@
 		}
 	},
 	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test"
+		"vscode:prepublish": "cd client && npm run update-vscode && cd .. && npm run compile",
+		"compile": "tsc -b",
+		"watch": "tsc -b -w",
+		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+		"test": "sh ./scripts/e2e.sh"
 	},
 	"devDependencies": {
-		"typescript": "^3.3.1",
-		"vscode": "^1.1.28",
-		"tslint": "^5.12.1",
-		"@types/node": "^10.12.21",
-		"@types/mocha": "^2.2.42"
-	},
-	"dependencies": {
-		"vscode-languageclient": "^4.2.1",
-		"vscode-languageserver": "^4.2.1",
-		"vscode-uri": "^1.0.5"
+		"@types/mocha": "^5.2.0",
+		"@types/node": "^8.0.0",
+		"tslint": "^5.16.0",
+		"typescript": "^3.5.1"
 	}
 }
