@@ -3,6 +3,7 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
 import * as child_process from "child_process";
+import Uri from "vscode-uri";
 import {
 	createConnection,
 	TextDocuments,
@@ -18,6 +19,7 @@ import {
 	ErrorMessageTracker,
 	Position
 } from 'vscode-languageserver';
+import { uriToFilePath } from 'vscode-languageserver/lib/files';
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -131,9 +133,11 @@ documents.onDidSave(file => {
 
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	// In this simple example we get the settings for every validate run.
-	let settings = await getDocumentSettings(textDocument.uri);
-	let editor = decodeURIComponent(textDocument.uri);
-	let file = editor.substr(8);
+	let settings = await getDocumentSettings(textDocument.uri);	
+	//let editor = decodeURIComponent(textDocument.uri);
+	//let file = editor.substr(8);
+	let file =Uri.parse(textDocument.uri).fsPath;
+	connection.console.log(file);
 	let filename = file.split('/');
 	//let tracker=new ErrorMessageTracker();
 	var text: string;
